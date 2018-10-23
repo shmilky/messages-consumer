@@ -1,2 +1,2 @@
 # messages-consumer
-Messages consumer package that consume messages by querying a centrelize queue via rest requests
+Messages consumer package that consume messages by querying a centralize queue via rest requests

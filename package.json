@@ -1,0 +1,9 @@
+{
+  "name": "messages-consumer",
+  "version": "1.0.0",
+  "main": "./src/messagesConsumer.js",
+  "author": "shmilky",
+  "dependencies": {
+    "simple-server-request": "1.0.0"
+  }
+}
