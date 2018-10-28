@@ -39,9 +39,6 @@ function MessagesConsumer (queueUrl, topic, startingOffset, messagesCountPerRequ
 
         getMessages(this.topicUrl, this.currOffset, 1, getMessagesCb);
     }
-
-
-
 }
 
 module.exports = MessagesConsumer;
