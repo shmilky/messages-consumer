@@ -3,8 +3,6 @@
 const request = require('simple-server-request');
 
 function getMessages (url, offset, limit, cb) {
-    console.log(`Fetching ${limit} messages from ${url} starting from offset ${limit}`);
-
     request.get(url, {offset, limit}, cb);
 }
 
