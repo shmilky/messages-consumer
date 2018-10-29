@@ -6,11 +6,18 @@ function getMessages (url, offset, limit, cb) {
     request.get(url, {offset, limit}, cb);
 }
 
-function MessagesConsumer (queueUrl, topic, startingOffset, messagesCountPerRequest) {
-    this.currOffset = startingOffset;
-    this.count = messagesCountPerRequest || 1;
+/**
+ * Will read messages iteratively from queueUrl/topic according to defined params and will call the events handler with the results (will not stop on error)
+ * @param queueUrl - full queue url
+ * @param topic - the topic to read messages from
+ * @param options - define optional parameters to the messages consumer (startingOffset, messagesCountPerRequest, waitingForNewMessagesTimeout)
+ */
+function MessagesConsumer (queueUrl, topic, options={}) {
+    this.currOffset = options.startingOffset || 0;
+    this.count = options.messagesCountPerRequest || 1;
     this.topic = topic;
     this.topicUrl = `${queueUrl}/${this.topic}`;
+    this.waitingForNewMessagesTimeout = options.waitingForNewMessagesTimeout;
 
     this.start = function (eventsHandler) {
         const Consumer = this;
@@ -20,9 +27,10 @@ function MessagesConsumer (queueUrl, topic, startingOffset, messagesCountPerRequ
                 console.error('Got error while trying to consume messages - ' + err);
                 eventsHandler(err);
             }
-            else if (events.length === 0) {
+
+            if (err || events.length === 0) {
                 // No messages waiting, will try to fetch new messages in 200 mills
-                setTimeout(function () {getMessages(Consumer.topicUrl, Consumer.currOffset, Consumer.count, getMessagesCb)}, 200);
+                setTimeout(function () {getMessages(Consumer.topicUrl, Consumer.currOffset, Consumer.count, getMessagesCb)}, Consumer.waitingForNewMessagesTimeout);
             }
             else {
                 // There are messages in the response, will update offset for next request, will call the handler and will go fetch new messages
