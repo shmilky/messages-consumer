@@ -46,9 +46,3 @@ function MessagesConsumer (queueUrl, topic, options={}) {
 }
 
 module.exports = MessagesConsumer;
-//
-// const Consumer = new MessagesConsumer('url', 'topic', 0, 3);
-//
-// Consumer.start(function (err, message) {
-//     console.log(JSON.stringify({err, message}));
-// });
