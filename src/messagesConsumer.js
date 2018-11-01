@@ -35,11 +35,9 @@ function MessagesConsumer (queueUrl, topic, options={}) {
             else {
                 // There are messages in the response, will update offset for next request, will call the handler and will go fetch new messages
                 Consumer.currOffset += events.length;
-                eventsHandler(null, events);
-                // TODO: Check if we need to sync the next message consumption with the event handler operation.
-                // TODO: We can add a cb that will be called at the end of the event handling)
-
-                setImmediate(function () {getMessages(Consumer.topicUrl, Consumer.currOffset, Consumer.count, getMessagesCb)});
+                eventsHandler(null, events, function () {
+                    setImmediate(function () {getMessages(Consumer.topicUrl, Consumer.currOffset, Consumer.count, getMessagesCb)});
+                });
             }
         }
 
